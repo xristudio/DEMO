@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Meetings 2026</title>
+    <style>
+        :root {
+            --primary-bg: #111827;
+            --secondary-bg: #1f2937;
+            --accent: #ef4444;
+            --text-main: #f3f4f6;
+            --text-dim: #9ca3af;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #f87171, #ef4444);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.25rem;
+        }
+
+        .meetings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .meeting-card {
+            background-color: var(--secondary-bg);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .meeting-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .circuit-image-container {
+            width: 100%;
+            height: 180px;
+            background: #2d3748;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circuit-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8);
+        }
+
+        .flag-overlay {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            z-index: 10;
+        }
+
+        .meeting-info {
+            padding: 1.5rem;
+        }
+
+        .meeting-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem;
+            color: white;
+        }
+
+        .location {
+            color: var(--accent);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .details {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .date-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 9999px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .meetings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>F1 Campeonato 2026</h1>
+
+    </header>
+
+    <div class="meetings-grid">
+        <div th:each="meeting : ${meetings}" class="meeting-card">
+            <div class="circuit-image-container">
+                <img th:if="${meeting.circuitImage != null}" th:src="${meeting.circuitImage}" class="circuit-image"
+                    alt="Circuit">
+                <img th:if="${meeting.countryFlag != null}" th:src="${meeting.countryFlag}" class="flag-overlay"
+                    alt="Flag">
+            </div>
+
+            <div class="meeting-info">
+                <span class="location" th:text="${meeting.location}">LOCATION</span>
+                <h3 class="meeting-title" th:text="${meeting.meetingOfficialName}">Meeting Official Name</h3>
+
+                <div class="details">
+                    <div class="detail-item">
+                        <span>Circuit:</span>
+                        <strong th:text="${meeting.circuitShortName}">Circuit Name</strong>
+                    </div>
+                </div>
+
+                <div class="date-badge">
+                    <span th:text="${#temporals.format(meeting.dateStart, 'MMM dd')}">Date</span> -
+                    <span th:text="${#temporals.format(meeting.dateEnd, 'MMM dd')}">Date</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
